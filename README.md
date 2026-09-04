@@ -1,30 +1,23 @@
 # ShopEase — Django + React E-Commerce App
 
-A full-stack e-commerce web application built with **Django REST Framework** (backend)
-and **React.js** (frontend), featuring JWT authentication, product catalog, cart
-management, and order checkout.
+A full-stack e-commerce web application built with **Django REST Framework** (backend) and **React.js** (frontend), featuring JWT authentication, product catalog, cart management, checkout, and **Razorpay payment integration**.
 
-> **Note:** Payment gateway integration (e.g. Razorpay) is intentionally **not**
-> included yet. Orders are created with `status="pending"` and an empty
-> `payment_method`. This is meant to be plugged in later at the checkout step —
-> see `orders/views.py` (`OrderListCreateView.create`) for where it hooks in.
+The application supports secure JWT-based authentication, product browsing, shopping cart management, order creation, Razorpay checkout, payment verification, and paid order tracking.
 
 ---
 
 ## Tech Stack
 
-| Layer          | Technology                                              |
-|----------------|----------------------------------------------------------|
-| Backend        | Django, Django REST Framework                            |
-| Auth           | JWT (djangorestframework-simplejwt)                       |
-| Database       | SQLite (Django ORM)                                       |
-| Frontend       | React.js, React Router, React Context API                 |
-| HTTP Client    | Axios (with interceptors for JWT + auto token refresh)    |
-| Notifications  | React Toastify                                             |
-| CORS           | django-cors-headers                                        |
-
----
-
+| Layer | Technology |
+|---|---|
+| Backend | Django, Django REST Framework |
+| Auth | JWT (djangorestframework-simplejwt) |
+| Database | SQLite (Django ORM) |
+| Frontend | React.js, React Router, React Context API |
+| HTTP Client | Axios (with interceptors for JWT + auto token refresh) |
+| Payment Gateway | Razorpay |
+| Notifications | React Toastify |
+| CORS | django-cors-headers |
 ## Project Structure
 
 ```
@@ -84,6 +77,8 @@ Admin panel: `http://127.0.0.1:8000/admin/`
 | GET    | `/api/orders/`                          | List current user's orders            |
 | POST   | `/api/orders/`                          | Checkout (creates order from cart)    |
 | GET    | `/api/orders/<id>/`                     | Order detail                          |
+| POST | `/api/orders/payment/create/` | Create Razorpay payment order |
+| POST | `/api/orders/payment/verify/` | Verify Razorpay payment signature |
 
 ---
 
@@ -102,16 +97,39 @@ update this if your backend runs elsewhere.
 
 ---
 
-## Where Payment Integration Will Go Later
+## Razorpay Payment Integration
 
-- **Backend:** `orders/models.py` already has `payment_method`, `payment_reference`,
-  `is_paid`, and `paid_at` fields on the `Order` model, left blank/false by default.
-  `orders/views.py` → `OrderListCreateView.create()` is where you'd call out to a
-  payment gateway (e.g. Razorpay order creation) after the order is saved.
-- **Frontend:** `src/pages/Checkout.jsx` has a placeholder note where the payment
-  method selection / gateway checkout button will go.
+Razorpay is integrated into the checkout flow for secure online payments.
 
----
+### Payment Flow
+
+1. User adds products to the cart.
+2. User enters shipping details during checkout.
+3. Django creates the order.
+4. Django creates a Razorpay order using the Razorpay API.
+5. React opens the Razorpay Checkout popup.
+6. User completes the payment.
+7. Razorpay returns the payment ID, order ID, and signature.
+8. React sends the payment details to the Django backend.
+9. Django verifies the Razorpay payment signature.
+10. The order is marked as paid after successful verification.
+
+```text
+React Checkout
+      ↓
+Create Django Order
+      ↓
+Create Razorpay Order
+      ↓
+Razorpay Checkout
+      ↓
+Payment
+      ↓
+Payment ID + Signature
+      ↓
+Django Payment Verification
+      ↓
+Order Marked as Paid
 
 ## Resume-Ready Description
 
