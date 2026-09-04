@@ -130,15 +130,18 @@ Payment ID + Signature
 Django Payment Verification
       ↓
 Order Marked as Paid
+```
 
 ## Resume-Ready Description
 
-> Built a full-stack e-commerce web application using Django REST Framework and
-> React.js, featuring JWT-based authentication, a product catalog with category
-> filtering and search, cart management, and order checkout. Designed relational
-> models (Product, Category, Cart, Order) using Django ORM with SQLite, and built
-> a responsive React frontend using Context API for global auth/cart state and
-> Axios interceptors for automatic JWT token refresh.
+> Built a full-stack e-commerce web application using Django REST Framework and React.js, featuring JWT-based authentication, product catalog with category filtering and search, cart management, order checkout, and Razorpay payment integration. Implemented Razorpay order creation, secure payment signature verification, and paid order tracking. Designed relational models (Product, Category, Cart, Order) using Django ORM with SQLite, and built a responsive React frontend using Context API for global auth/cart state and Axios interceptors for automatic JWT token refresh.
 
-**Technologies:** Python, JavaScript, Django, Django REST Framework, React.js,
-React Router, React Context API, Axios, JWT Authentication, SQLite, django-cors-headers
+**Technologies:** Python, JavaScript, Django, Django REST Framework, React.js, React Router, React Context API, Axios, JWT Authentication, Razorpay, SQLite, django-cors-headers
+
+## Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+RAZORPAY_KEY_ID=your_razorpay_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_key_secret
