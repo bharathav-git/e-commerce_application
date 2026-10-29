@@ -1,0 +1,7 @@
+Git and GitHub Practical Training
+
+Task: Understanding Git Workflow
+
+Feature: Product Details
+
+Developer: Bharath
